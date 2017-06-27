@@ -1,6 +1,7 @@
 package Lotto;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -9,6 +10,9 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -19,7 +23,9 @@ public class LottoAuto extends JFrame{
 	JTextArea resultTxt;
 	JTextField gameNum;
 	JLabel lotto;
-	JPanel panel;	
+	JPanel number_panel,result_panel;	
+	JMenu lottoNum;
+	JMenuItem item1,item2;
 	
 	public LottoAuto(){
 		
@@ -27,6 +33,7 @@ public class LottoAuto extends JFrame{
 		
 		setTitle("로또번호 자동");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		createMenu();
 		
 		setLayout(new BorderLayout());
 		
@@ -34,21 +41,44 @@ public class LottoAuto extends JFrame{
 		gameNum = new JTextField("5",5);
 		start = new JButton("시작");
 		
-		panel = new JPanel();
-		panel.add(lotto);
-		panel.add(gameNum);
-		panel.add(start);
+		number_panel = new JPanel();
+		number_panel.add(lotto);
+		number_panel.add(gameNum);
+		number_panel.add(start);
 		
+		result_panel = new JPanel();
 		resultTxt = new JTextArea();
+		result_panel.add(resultTxt);
 		
 		handler = new MyButtonHandler();
 		start.addActionListener(handler);
 		
-		add(panel,BorderLayout.NORTH);		
-		add(resultTxt,BorderLayout.CENTER);
+		add(number_panel,BorderLayout.NORTH);		
+		add(result_panel,BorderLayout.CENTER);
 		
-		setSize(500,700);
+		
+		number_panel.setVisible(false);
+		
+		setSize(700,700);
 		setVisible(true);
+	}
+	
+	void createMenu(){
+		
+		JMenuBar mb = new JMenuBar();
+		lottoNum = new JMenu("로또");
+		item1 = new JMenuItem("번호 자동 생성");
+		item2 = new JMenuItem("당첨 확인");
+		
+		item1.addActionListener(new MenuActionListener());
+		item2.setEnabled(false);
+		item2.addActionListener(new MenuActionListener());
+		
+		lottoNum.add(item1);
+		lottoNum.add(item2);
+		
+		mb.add(lottoNum);
+		setJMenuBar(mb);
 	}
 	
 	public static void main(String[] args) {
@@ -59,11 +89,6 @@ public class LottoAuto extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e){
-			if(e.getActionCommand().equals("시작")){
-				resultTxt.setText("");
-				resultTxt.append("---- 로또 번호 자동 생성 ----\n");
-				resultTxt.append("생성 개수는 "+gameNum.getText()+"줄입니다.\n");
-			}
 			
 			LottoNumber l = new LottoNumber();
 			
@@ -73,7 +98,7 @@ public class LottoAuto extends JFrame{
 				int bonus = l.getBouns();
 				l.sortNumber();
 				
-				resultTxt.setText(resultTxt.getText()+"-------------------------"+(x+1)+"번째게임"+"-------------------------\n");  
+				resultTxt.setText(resultTxt.getText()+(x+1)+"번째 줄"+"------------------------------------------------\n");  
 				
 				for(int i = 0; i < 6; i++){
 					resultTxt.setText(resultTxt.getText()+" "+l.getNumber(i)+"\t"); //6개의 숫자를 화면에 나오게 한다.
@@ -84,6 +109,26 @@ public class LottoAuto extends JFrame{
 			}
 			
 		}
+		
+	}
+	
+	class MenuActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getActionCommand().equals("번호 자동 생성")){
+				number_panel.setVisible(true);
+				item2.setEnabled(true);
+			}else if(e.getActionCommand().equals("당첨 확인")){
+				gameNum.setVisible(false);
+				start.setVisible(false);
+				
+				lotto.setText("이번주 당첨번호는 10,22,27,31,42,43 보너스 번호는 12입니다.");
+				Font tf = new Font("Curier", Font.PLAIN, 20);
+				lotto.setFont(tf);
+			}
+		}
+		
 		
 	}
 	

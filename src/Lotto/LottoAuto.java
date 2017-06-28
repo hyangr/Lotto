@@ -56,7 +56,6 @@ public class LottoAuto extends JFrame{
 		add(number_panel,BorderLayout.NORTH);		
 		add(result_panel,BorderLayout.CENTER);
 		
-		
 		number_panel.setVisible(false);
 		
 		setSize(700,700);
@@ -93,6 +92,7 @@ public class LottoAuto extends JFrame{
 			LottoNumber l = new LottoNumber();
 			
 			for(int x = 0; x < Integer.parseInt(gameNum.getText()); x++){
+				
 				l.createNumber();
 				l.getBonus(l.getRandom());
 				int bonus = l.getBouns();
@@ -105,9 +105,7 @@ public class LottoAuto extends JFrame{
 				}
 				
 				resultTxt.setText(resultTxt.getText()+"보너스 : "+bonus+"\n\n"); //보너스 숫자를 화면에 나오게 한다.
-				
 			}
-			
 		}
 		
 	}
@@ -129,10 +127,10 @@ public class LottoAuto extends JFrame{
 			}
 		}
 		
-		
 	}
 	
 	class LottoNumber{
+		
 		private int number;
 		private int bonus;
 		private boolean flag;
@@ -166,6 +164,7 @@ public class LottoAuto extends JFrame{
 		void getBonus(int r_num){
 			Random r = new Random();
 			for(int i = 0; i<6; i++){
+				
 				flag = false;
 				number = r.nextInt(46);
 				if(number == 0){
@@ -197,7 +196,6 @@ public class LottoAuto extends JFrame{
 				}
 			}
 		}
-		
 	}
 }
 
